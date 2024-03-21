@@ -36,11 +36,15 @@ Name | type | Description
 
 ## Usage
 
-As of this writing the `Switch` class is not able to be loaded into Air Manager. For this reason you will have to copy the contents of `lib/Switch.lua` into the top of your `logic.lua`.
-An additional class named `lib/ToggleSwitch.lua` is also provided this is a subclass of `Switch` with the necessary functions to make a toggle switch in the simulator act as a two position switch. [Perhaps not the best class name...]
+An additional class named `lib/SwitchToggle.lua` is also provided this is a subclass of `Switch` with the necessary functions to make a toggle switch in the simulator act as a two position switch. [Perhaps not the best class name...]
 An example `logic.lua` is also given showing how this code code be used in practice.
+This repository is structured as a full Air Manager component and will run `logic.lua` without any modification.
 
-Note: Air Manager has [disabled `require ()`](https://cr4o13.github.io/the-lua-environment-in-air-manager.html) due to the unavailability of the `package` library.
+Because Air Manager has disabled the `package` library, [the `require ()` function](https://cr4o13.github.io/the-lua-environment-in-air-manager.html) is not available.
+The solution to this is that the `Switch` class and any other class that is needed must be declared as `global` tables.
+This is less than ideal and is necessary because of the programming decisions needed for Air Manager.
+
+If you want to use the `Switch` class in every library and not have to include it in each of your hardware components, you can place the `Switch.lua` file in the `Air Manager/lua_libs` folder where the `Air Manager` directory is the home directory for your particular OS for the Air Manager application.
 
 ### Simple Switch
 ```lua
@@ -61,10 +65,10 @@ beacon_light:hw_switch_add ()
 
 ```lua
 --- Adds additional actions to Switch class to simulate a Bendix Switch
----@class MagnetoSwitch : Switch
-local MagnetoSwitch = Switch:new ()
+---@class SwitchMagneto : Switch
+local SwitchMagneto = Switch:new ()
 
-function MagnetoSwitch:callback (position)
+function SwitchMagneto:callback (position)
     Switch.callback (self, position)
 
     if self.position == 3 then
@@ -77,10 +81,10 @@ end
 ```
 
 Note, the `Switch.callback (self, position)` executes the super class's callback preserving all of the normal functionality of that callback method.
-The `MagnetoSwitch` class example would be used in the code by,
+The `SwitchMagneto` class example would be used in the code by,
 ```lua
 -- Magnetos
-local magnetos = MagnetoSwitch:new {
+local magnetos = SwitchMagneto:new {
     name = "Bendix magneto switch",
     n_pos = 5,
     fs_event = {
@@ -101,12 +105,12 @@ local magnetos = MagnetoSwitch:new {
 magnetos:hw_switch_add ()
 ```
 
-### `ToggleSwitch`
+### `SwitchToggle`
 A good example of when a toggle switch is required is the fuel boost pump.
 
 ```lua
 -- Fuel Boost Pump
-local fuel_boost_pump = ToggleSwitch:new {
+local fuel_boost_pump = SwitchToggle:new {
     name = "Fuel boost pump switch",
     fs_event = {"TOGGLE_ELECT_FUEL_PUMP1"},
     fs_variable = {"GENERAL ENG FUEL PUMP SWITCH:1"},

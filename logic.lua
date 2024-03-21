@@ -1,10 +1,3 @@
--- Replace these required lines if the code doesn't run with the contents of
--- the respective lib/NAME.lua file.
-local Switch = require "Switch"
-local ToggleSwitch = require "ToggleSwitch"
-local MagnetoSwitch = require "MagnetoSwitch"
-
-
 -- Beacon Lights
 local beacon_light = Switch:new {
     name = "Beacon switch",
@@ -19,7 +12,7 @@ beacon_light:hw_switch_add ()
 
 
 -- Fuel Boost Pump
-local fuel_boost_pump = ToggleSwitch:new {
+local fuel_boost_pump = SwitchToggle:new {
     name = "Fuel boost pump switch",
     fs_event = {"TOGGLE_ELECT_FUEL_PUMP1"},
     fs_variable = {"GENERAL ENG FUEL PUMP SWITCH:1"},
@@ -28,7 +21,7 @@ local fuel_boost_pump = ToggleSwitch:new {
 fuel_boost_pump:hw_switch_add ()
 
 -- Magnetos
-local magnetos = MagnetoSwitch:new {
+local magnetos = SwitchMagneto:new {
     name = "Bendix magneto switch",
     n_pos = 5,
     fs_event = {

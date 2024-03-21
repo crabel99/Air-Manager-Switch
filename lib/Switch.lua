@@ -9,7 +9,7 @@
 ---@field n_pos integer -- number of switch positions, default is 1
 ---@field length integer -- length of switch actions, default is 2
 ---@field position integer|nil -- Switch position
-local Switch = {
+Switch = {
     var_type = "Bool",
     n_pos = 1,
     length = 2
@@ -91,6 +91,3 @@ function Switch:hw_switch_add ()
 
     return self.id
 end
-
--- Do not copy this line if copying this file directly into logic.lua
-return Switch

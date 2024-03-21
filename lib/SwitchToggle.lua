@@ -1,20 +1,17 @@
--- Do not copy this line if copying this file directly into logic.lua
-local Switch = require "Switch"
-
---- The ToggleSwitch provides a container to simplify the integration of FS
+--- The SwitchToggle provides a container to simplify the integration of FS
 --- toggle switches and X-plane two position switches into Air Manager.
 --- This uses FS TOGGLE events and the corresponding X-plane commandrefs.
----@class ToggleSwitch : Switch
+---@class SwitchToggle : Switch
 ---@field private state boolean
 ---@field private fs_available boolean
 ---@field private xp_available boolean
 ---@field private xp_toggle boolean
-local ToggleSwitch = Switch:new ()
+SwitchToggle = Switch:new ()
 
 -- Flight Simulator X/2020 Toggle Switch update
 ---@param state boolean
 ---@private
-function ToggleSwitch:new_data (state)
+function SwitchToggle:new_data (state)
     self.state = state
 
     if (self.state == false and self.position == 1) or
@@ -27,7 +24,7 @@ end
 
 --- Configure the class behavior based on the inputs
 ---@private
-function ToggleSwitch:setup ()
+function SwitchToggle:setup ()
     self.length = 2
     self.fs_available = next(self.fs_variable) ~= nil
     self.xp_available = next(self.commandref) ~= nil
@@ -54,7 +51,7 @@ end
 --- Switch Callback
 ---@param position integer|nil
 ---@private
-function ToggleSwitch:callback (position)
+function SwitchToggle:callback (position)
 
     self.position = position
 
@@ -84,6 +81,3 @@ function ToggleSwitch:callback (position)
         request_callback (function () self:new_data (self.state) end)
     end
 end
-
--- Do not copy this line if copying this file directly into logic.lua
-return ToggleSwitch
